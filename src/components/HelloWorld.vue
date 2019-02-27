@@ -1,40 +1,69 @@
+/*
+ * @Author: wanghaoyu
+ * @Date: 2019-02-26 11:18:57
+ * @Last Modified by: wanghaoyu
+ * @Last Modified time: 2019-02-26 13:53:17
+ */
+
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+   <ul class="list-group list-group-flush">
+     <template v-for="(item, index) in listData">
+        <li
+        v-if="item.titleImgUrl && index < 10"
+        class="list-group-item flex-container"
+        :key="item.prjId"
+        @click="clickPic(item.titleImgUrl)">
+          <img :src="item.titleImgUrl" alt="tumb">
+          <div>{{item.prjLabels}}</div>
+        </li>
+     </template>
+   </ul>
   </div>
 </template>
 
 <script>
+import data from './data.json'
+import { remote, ipcRenderer } from 'electron'
+const { Menu } = remote
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data () {
+    return {
+      listData: data.result.list
+    }
+  },
+  created () {
+    this.initMenu()
+  },
+  methods: {
+    initMenu () {
+      const menu = Menu.buildFromTemplate([
+        {
+          label: 'File',
+          submenu: [
+            { label: 'New Window' },
+            {
+              label: 'Settings',
+              accelerator: 'cmdOrCtrl+,',
+              click: () => {
+                ipcRenderer.send('toggle-settings')
+              }
+            }
+          ]
+        }
+      ])
+      Menu.setApplicationMenu(menu)
+    },
+    clickPic (url) {
+      // eslint-disable-next-line
+      console.log(111111, __static)
+      ipcRenderer.send('toggle-image', url)
+    }
   }
 }
 </script>
@@ -54,5 +83,18 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.flex-container > img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 15px;
 }
 </style>
