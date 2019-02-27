@@ -1,34 +1,23 @@
-# electron-vue-v3.0
+# electron-vue
 
-## Project setup
+使用 vue-cli3.0 引入 [vue-cli-plugin-electron-builder](https://nklayman.github.io/vue-cli-plugin-electron-builder/)
+
+## 安装依赖
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 调试
 ```
 yarn electron:serve
 ```
 
-### make app icon
+### 将目录中的 icon.png 转换设置成桌面图标
 ```
-electron:generate-icon
+yarn electron:generate-icon
 ```
 
-### Compiles and minifies for production
+### 打包
 ```
 yarn electron:build 
 ```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
